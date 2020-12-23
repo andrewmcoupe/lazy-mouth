@@ -1,0 +1,146 @@
+name: Build/test/deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  run-quality-checks:
+    name: 📋  Run quality checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+
+      - name: Restore node_modules from cache
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: v1-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install NPM packages
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Prettier
+        run: npm run prettier
+
+      - name: Run linters
+        run: npm run lint
+
+      - name: Run type check
+        run: npm run tsc
+
+  run-tests:
+    name: 🧪  Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+
+      - name: Restore node_modules from cache
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: v1-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install NPM packages
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_SECRET }}
+          aws-region: eu-west-1
+
+
+  deploy-to-dev:
+    name: 🛶  Deploy to dev
+    needs:
+      - run-quality-checks
+      - run-tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.event.ref == 'refs/heads/main') }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+
+      - name: Restore node_modules from cache
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: v1-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install NPM packages
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Configure dev AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_SECRET }}
+          aws-region: eu-west-1
+
+      - name: Deploy to dev stage
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GHP_TOKEN }}
+        run: SLS_DEBUG=* npm run deploy
+
+#  deploy-to-prod:
+#    name: 🚢  Deploy to prod
+#    needs: [deploy-to-dev]
+#    runs-on: ubuntu-latest
+#    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.event.ref == 'refs/heads/main') }}
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - uses: actions/setup-node@v2-beta
+#        with:
+#          node-version: '12'
+#
+#      - name: Restore node_modules from cache
+#        id: cache-node-modules
+#        uses: actions/cache@v2
+#        with:
+#          path: node_modules
+#          key: v1-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+#
+#      - name: Install NPM packages
+#        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+#        run: npm ci
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.GHP_TOKEN }}
+#
+#      - name: Configure prod AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_PROD_PRODUCT_DEPLOY_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_PROD_PRODUCT_DEPLOY_SECRET }}
+#          aws-region: eu-west-1
+#
+#      - name: Deploy to prod stage
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.GHP_TOKEN }}
+#        run: SLS_DEBUG=* yarn deploy:prod

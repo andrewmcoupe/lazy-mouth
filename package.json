@@ -5,7 +5,10 @@
   "main": "handler.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint '*/**/*.{js,ts}' --quiet --fix"
+    "lint": "eslint '*/**/*.{js,ts}' --quiet --fix",
+    "prettier": "prettier \"./src/**/*.{ts,js,json}\" --check",
+    "tsc": "tsc -p tsconfig.json --noEmit",
+    "deploy": "AWS_REGION=eu-west-1 TEST_STACK=false serverless deploy --stage dev"
   },
   "husky": {
     "hooks": {
