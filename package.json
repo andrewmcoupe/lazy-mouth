@@ -1,10 +1,11 @@
 {
+  "author": "Andy Coupe",
+  "license": "MIT",
   "name": "lazy-mouth",
   "version": "1.0.0",
-  "description": "Serverless webpack example using Typescript",
-  "main": "handler.js",
+  "description": "An app for a lazy mouth",
   "scripts": {
-    "test": "jest",
+    "test:unit": "jest --testMatch '**/*/*.test.ts'",
     "lint": "eslint '*/**/*.{js,ts}' --quiet --fix",
     "prettier": "prettier \"./src/**/*.{ts,js,json}\" --check",
     "tsc": "tsc -p tsconfig.json --noEmit",
@@ -21,31 +22,31 @@
     ]
   },
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.11.0",
-    "@typescript-eslint/parser": "^4.11.0",
-    "eslint": "^7.16.0",
-    "eslint-config-prettier": "^7.1.0",
-    "eslint-plugin-prettier": "^3.3.0",
+
+    "serverless": "^2.16.1",
     "source-map-support": "^0.5.10",
-    "ts-jest": "^26.4.4"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.11.0",
+    "@typescript-eslint/parser": "^4.11.0",
     "@types/aws-lambda": "^8.10.17",
     "@types/jest": "^26.0.19",
     "@types/node": "^10.12.18",
     "@types/serverless": "^1.72.5",
+    "eslint": "^7.16.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.0",
     "fork-ts-checker-webpack-plugin": "^3.0.1",
     "jest": "^26.6.3",
     "jest-circus": "^26.6.3",
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1",
     "serverless-webpack": "^5.2.0",
+    "ts-jest": "^26.4.4",
     "ts-loader": "^5.3.3",
     "ts-node": "^8.10.2",
     "typescript": "^3.2.4",
     "webpack": "^4.29.0",
     "webpack-node-externals": "^1.7.2"
-  },
-  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
-  "license": "MIT"
+  }
 }
