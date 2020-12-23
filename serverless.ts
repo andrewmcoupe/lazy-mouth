@@ -1,4 +1,4 @@
-import { Serverless } from 'serverless/aws';
+import { Serverless } from 'serverless/aws'
 
 const serverlessConfiguration: Serverless = {
   service: {
@@ -11,13 +11,14 @@ const serverlessConfiguration: Serverless = {
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
-      includeModules: true
-    }
+      includeModules: true,
+    },
   },
   // Add the serverless-webpack plugin
   plugins: ['serverless-webpack'],
   provider: {
     name: 'aws',
+    region: 'eu-west-1',
     runtime: 'nodejs12.x',
     apiGateway: {
       minimumCompressionSize: 1024,
@@ -29,12 +30,25 @@ const serverlessConfiguration: Serverless = {
   resources: {
     Resources: {
       creationsTable: {
+        Type: 'AWS::DynamoDB::Table',
         Properties: {
-          TableName: 'creations_${opt:stage, self:provider.stage, \'dev\'}',
+          TableName: "creations_${opt:stage, self:provider.stage, 'dev'}",
+          AttributeDefinitions: [
+            {
+              AttributeName: 'title',
+              AttributeType: 'S',
+            },
+          ],
+          KeySchema: [
+            {
+              AttributeName: 'title',
+              KeyType: 'HASH',
+            },
+          ],
+          BillingMode: 'PAY_PER_REQUEST',
         },
-        Type: 'AWS::DynamoDB::Table'
-      }
-    }
+      },
+    },
   },
   functions: {
     hello: {
@@ -44,11 +58,11 @@ const serverlessConfiguration: Serverless = {
           http: {
             method: 'get',
             path: 'hello',
-          }
-        }
-      ]
-    }
-  }
+          },
+        },
+      ],
+    },
+  },
 }
 
-module.exports = serverlessConfiguration;
+module.exports = serverlessConfiguration
