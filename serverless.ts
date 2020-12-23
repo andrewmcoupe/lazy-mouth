@@ -1,68 +1,22 @@
 import { Serverless } from 'serverless/aws'
+import { getResources } from './serverless-config/resources'
+import { getFunctions } from './serverless-config/functions'
+import { getProvider } from './serverless-config/provider'
+import { packageConfig } from './serverless-config/package'
+import { customConfig } from './serverless-config/custom'
+import { pluginConfig } from './serverless-config/plugins'
+
+const serviceName = 'lazy-mouth'
 
 const serverlessConfiguration: Serverless = {
-  service: {
-    name: 'lazy-mouth',
-    // app and org for use with dashboard.serverless.com
-    // app: your-app-name,
-    // org: your-org-name,
-  },
+  service: serviceName,
   frameworkVersion: '>=1.72.0',
-  custom: {
-    webpack: {
-      webpackConfig: './webpack.config.js',
-      includeModules: true,
-    },
-  },
-  // Add the serverless-webpack plugin
-  plugins: ['serverless-webpack'],
-  provider: {
-    name: 'aws',
-    region: 'eu-west-1',
-    runtime: 'nodejs12.x',
-    apiGateway: {
-      minimumCompressionSize: 1024,
-    },
-    environment: {
-      AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-    },
-  },
-  resources: {
-    Resources: {
-      creationsTable: {
-        Type: 'AWS::DynamoDB::Table',
-        Properties: {
-          TableName: "creations_${opt:stage, self:provider.stage, 'dev'}",
-          AttributeDefinitions: [
-            {
-              AttributeName: 'title',
-              AttributeType: 'S',
-            },
-          ],
-          KeySchema: [
-            {
-              AttributeName: 'title',
-              KeyType: 'HASH',
-            },
-          ],
-          BillingMode: 'PAY_PER_REQUEST',
-        },
-      },
-    },
-  },
-  functions: {
-    hello: {
-      handler: 'src/functions/handler.hello',
-      events: [
-        {
-          http: {
-            method: 'get',
-            path: 'hello',
-          },
-        },
-      ],
-    },
-  },
+  custom: customConfig,
+  package: packageConfig,
+  plugins: pluginConfig,
+  provider: getProvider(),
+  resources: getResources(),
+  functions: getFunctions(),
 }
 
 module.exports = serverlessConfiguration
