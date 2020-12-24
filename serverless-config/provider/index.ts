@@ -10,4 +10,8 @@ export const getProvider = (): AWS.Provider => ({
   environment: {
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
   },
+  // iamRoleStatements: [{
+  //   Effect: 'Allow',
+  //   Resource: 'AWS::DynamobD'
+  // }]
 })

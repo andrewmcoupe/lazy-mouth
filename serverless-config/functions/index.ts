@@ -1,13 +1,13 @@
 import AWS from 'serverless/aws'
 
 export const getFunctions = (): AWS.Functions => ({
-  hello: {
-    handler: 'src/functions/handler.hello',
+  addProduct: {
+    handler: 'src/functions/add-product/add-product.handler',
     events: [
       {
         http: {
-          method: 'get',
-          path: 'hello',
+          method: 'post',
+          path: '/products',
         },
       },
     ],
