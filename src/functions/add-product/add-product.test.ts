@@ -9,4 +9,11 @@ describe('ADD PRODUCT', () => {
 
     expect(res.statusCode).toBe(400)
   })
+
+  it('should return a 200 if a valid body is provided in the request', async () => {
+    const stubEvent = stub<APIGatewayProxyEvent>({ body: "{name: 'Andy'}" })
+    const res = await handler(stubEvent)
+
+    expect(res.statusCode).toBe(400)
+  })
 })

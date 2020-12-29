@@ -1,4 +1,5 @@
 import AWS from 'serverless/aws'
+import { addProductSchema } from '../validation-schema/add-product'
 
 export const getFunctions = (): AWS.Functions => ({
   addProduct: {
@@ -8,6 +9,11 @@ export const getFunctions = (): AWS.Functions => ({
         http: {
           method: 'post',
           path: '/products',
+          request: {
+            schema: {
+              'application/json': addProductSchema,
+            },
+          },
         },
       },
     ],
