@@ -1,5 +1,11 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
+export interface Product {
+  title: string
+  description: string
+  price: number
+}
+
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   if (!event.body) {
     return {
@@ -8,8 +14,10 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     }
   }
 
+  const product: Product = JSON.parse(event.body)
+
   return {
-    statusCode: 200,
-    body: '',
+    statusCode: 201,
+    body: JSON.stringify(product),
   }
 }
