@@ -24,15 +24,18 @@
   "dependencies": {
     "@lambda-middleware/http-error-handler": "^2.0.0",
     "serverless": "^2.16.1",
-    "source-map-support": "^0.5.10"
+    "source-map-support": "^0.5.10",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
     "@types/jest": "^26.0.19",
     "@types/node": "^10.12.18",
     "@types/serverless": "^1.72.5",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
+    "aws-sdk": "^2.819.0",
     "eslint": "^7.16.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.0",

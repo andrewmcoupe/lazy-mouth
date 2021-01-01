@@ -2,8 +2,6 @@ module.exports = {
   testRunner: 'jest-circus/runner',
   automock: false,
   preset: 'ts-jest',
-  globals: {
-    // A set of global variables that need to be available in all test environments.
-  },
+  setupFiles: ['<rootDir>/.jest/setEnvVars.js'],
   testEnvironment: 'node',
 }

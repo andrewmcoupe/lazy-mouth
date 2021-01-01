@@ -3,6 +3,7 @@ import { errorHandler } from '@lambda-middleware/http-error-handler'
 import { addProduct } from '../../services/product-service'
 
 export interface Product {
+  _id?: string
   title: string
   description: string
   price: number
@@ -18,11 +19,11 @@ export const handle = async (event: APIGatewayProxyEvent): Promise<APIGatewayPro
 
   const product: Product = JSON.parse(event.body)
 
-  await addProduct(product)
+  const newProduct = await addProduct(product)
 
   return {
     statusCode: 201,
-    body: JSON.stringify(product),
+    body: JSON.stringify(newProduct),
   }
 }
 
