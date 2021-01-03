@@ -39,8 +39,8 @@ jobs:
       - name: Run type check
         run: npm run tsc
 
-  run-tests:
-    name: 🧪  Run tests
+  run-unit-tests:
+    name: 🧪  Unit tests
     runs-on: ubuntu-latest
 
     steps:
@@ -63,6 +63,31 @@ jobs:
 
       - name: Run unit tests
         run: npm run test:unit
+
+  run-integ-tests:
+    name: 🧪  Integration tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+
+      - name: Restore node_modules from cache
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: v1-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install NPM packages
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Run integration tests
+        run: npm run test:int
 
 
   deploy-to-dev:

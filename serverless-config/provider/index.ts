@@ -10,8 +10,12 @@ export const getProvider = (): AWS.Provider => ({
   environment: {
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
   },
-  // iamRoleStatements: [{
-  //   Effect: 'Allow',
-  //   Resource: 'AWS::DynamobD'
-  // }]
+  iamRoleStatements: [
+    {
+      Effect: 'Allow',
+      Action: ['dynamodb:PutItem'],
+      Resource:
+        "arn:aws:dynamodb:eu-west-1:426272767687::table/creationsTable_${opt:stage, self:provider.stage, 'dev'}",
+    },
+  ],
 })

@@ -4,8 +4,7 @@ import { insertProduct } from '../data-access/product'
 
 export async function addProduct(product: Product) {
   try {
-    await insertProduct({ ...product, _id: uuidv4() })
-    return true
+    return await insertProduct({ ...product, _id: uuidv4() })
   } catch (e) {
     console.log(e)
     return false

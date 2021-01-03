@@ -7,13 +7,13 @@ export default (): AWS.Resources['Resources'] => ({
       TableName: "creationsTable_${opt:stage, self:provider.stage, 'dev'}",
       AttributeDefinitions: [
         {
-          AttributeName: 'title',
+          AttributeName: '_id',
           AttributeType: 'S',
         },
       ],
       KeySchema: [
         {
-          AttributeName: 'title',
+          AttributeName: '_id',
           KeyType: 'HASH',
         },
       ],

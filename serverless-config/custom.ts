@@ -4,4 +4,7 @@ export const customConfig: AWS.Custom = {
     webpackConfig: './webpack.config.js',
     includeModules: true,
   },
+  output: {
+    file: 'stack-output.json',
+  },
 }
