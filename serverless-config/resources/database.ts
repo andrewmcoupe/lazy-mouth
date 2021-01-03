@@ -1,10 +1,10 @@
 import AWS from 'serverless/aws'
 
 export default (): AWS.Resources['Resources'] => ({
-  creationsTable: {
+  productsTable: {
     Type: 'AWS::DynamoDB::Table',
     Properties: {
-      TableName: "creationsTable_${opt:stage, self:provider.stage, 'dev'}",
+      TableName: "productsTable_${opt:stage, self:provider.stage, 'dev'}",
       AttributeDefinitions: [
         {
           AttributeName: '_id',

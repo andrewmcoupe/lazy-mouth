@@ -14,8 +14,7 @@ export const getProvider = (): AWS.Provider => ({
     {
       Effect: 'Allow',
       Action: ['dynamodb:PutItem'],
-      Resource:
-        "arn:aws:dynamodb:eu-west-1:426272767687::table/creationsTable_${opt:stage, self:provider.stage, 'dev'}",
+      Resource: "arn:aws:dynamodb:eu-west-1:426272767687::table/productsTable_${opt:stage, self:provider.stage, 'dev'}",
     },
   ],
 })
