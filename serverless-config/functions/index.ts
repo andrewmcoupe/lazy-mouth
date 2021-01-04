@@ -21,4 +21,18 @@ export const getFunctions = (): AWS.Functions => ({
       },
     ],
   },
+  getProduct: {
+    environment: {
+      PRODUCTS_TABLE_NAME: "productsTable_${opt:stage, self:provider.stage, 'dev'}",
+    },
+    handler: 'src/functions/get-product/get-product.handler',
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: '/products/{id}',
+        },
+      },
+    ],
+  },
 })

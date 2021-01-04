@@ -1,6 +1,7 @@
-import { addProduct } from './product-service'
+import { v4 as uuidv4 } from 'uuid'
+import { addProduct, getProduct } from './product-service'
 import { Product } from '../functions/add-product/add-product'
-import { insertProduct } from '../data-access/product'
+import { insertProduct, getProductById } from '../data-access/product'
 
 jest.mock('../data-access/product')
 
@@ -34,6 +35,42 @@ describe('PRODUCT SERVICE', () => {
       mockInsertProduct.mockRejectedValue(false)
 
       const result = await addProduct(stubProduct)
+
+      expect(result).toBe(false)
+    })
+  })
+  describe('getProduct', () => {
+    it('should call getProductById() with the correct arguments', async () => {
+      const stubId = uuidv4()
+      const mockGetProductById = getProductById as jest.Mock
+
+      await getProduct(stubId)
+
+      expect(mockGetProductById).toHaveBeenCalledWith(stubId)
+    })
+
+    it('should return the product with the matching ID', async () => {
+      const stubId = uuidv4()
+      const stubProduct: Product = {
+        _id: stubId,
+        title: 'Test product',
+        description: 'Test description',
+        price: 5,
+      }
+      const mockGetProductById = getProductById as jest.Mock
+      mockGetProductById.mockResolvedValue(stubProduct)
+
+      const result = await getProduct(stubProduct._id!)
+
+      expect(result).toEqual(stubProduct)
+    })
+
+    it('should return false if there is an error retrieving product', async () => {
+      const stubId = uuidv4()
+      const mockGetProductById = getProductById as jest.Mock
+      mockGetProductById.mockRejectedValue(false)
+
+      const result = await getProduct(stubId)
 
       expect(result).toBe(false)
     })
