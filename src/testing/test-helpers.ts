@@ -5,5 +5,5 @@ export const stub = <T>(obj: Partial<T>) => {
 }
 
 export const handleStack = (action: 'deploy' | 'remove', stage: 'prod' | 'dev' | 'integration') => {
-  execSync(`serverless ${action} --stage ${stage}`, { encoding: 'utf8' })
+  execSync(`npx serverless ${action} --stage ${stage}`, { encoding: 'utf8' })
 }
