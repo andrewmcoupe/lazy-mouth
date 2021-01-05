@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { addProduct, getProduct } from './product-service'
-import { Product } from '../functions/add-product/add-product'
+import { Product } from '../handlers/http/add-product/add-product'
 import { insertProduct, getProductById } from '../data-access/product'
 
 jest.mock('../data-access/product')

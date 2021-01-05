@@ -1,5 +1,5 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-import { Product } from '../functions/add-product/add-product'
+import { Product } from '../handlers/http/add-product/add-product'
 
 const dynamoDb = new DocumentClient()
 const productsTableName = process.env.PRODUCTS_TABLE_NAME as string

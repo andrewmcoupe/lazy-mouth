@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { errorHandler } from '@lambda-middleware/http-error-handler'
-import { addProduct } from '../../services/product-service'
+import { addProduct } from '../../../services/product-service'
 
 export interface Product {
   _id?: string

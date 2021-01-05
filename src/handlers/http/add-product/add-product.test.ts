@@ -1,9 +1,9 @@
 import { handler, Product } from './add-product'
-import { stub } from '../../testing/test-helpers'
+import { stub } from '../../../testing/test-helpers'
 import { APIGatewayProxyEvent, Context } from 'aws-lambda'
-import { addProduct } from '../../services/product-service'
+import { addProduct } from '../../../services/product-service'
 
-jest.mock('../../services/product-service')
+jest.mock('../../../services/product-service')
 
 const stubBody: Product = {
   title: 'Test title',

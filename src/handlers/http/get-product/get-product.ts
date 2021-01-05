@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { errorHandler } from '@lambda-middleware/http-error-handler'
-import { getProduct } from '../../services/product-service'
+import { getProduct } from '../../../services/product-service'
 
 export const handle = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   if (!event.pathParameters?.id) {

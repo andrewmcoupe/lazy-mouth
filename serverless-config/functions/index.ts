@@ -6,7 +6,7 @@ export const getFunctions = (): AWS.Functions => ({
     environment: {
       PRODUCTS_TABLE_NAME: "productsTable_${opt:stage, self:provider.stage, 'dev'}",
     },
-    handler: 'src/functions/add-product/add-product.handler',
+    handler: 'src/handlers/http/add-product/add-product.handler',
     events: [
       {
         http: {
@@ -25,7 +25,7 @@ export const getFunctions = (): AWS.Functions => ({
     environment: {
       PRODUCTS_TABLE_NAME: "productsTable_${opt:stage, self:provider.stage, 'dev'}",
     },
-    handler: 'src/functions/get-product/get-product.handler',
+    handler: 'src/handlers/http/get-product/get-product.handler',
     events: [
       {
         http: {

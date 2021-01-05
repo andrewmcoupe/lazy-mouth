@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { insertProduct, getProductById } from './product'
-import { Product } from '../functions/add-product/add-product'
+import { Product } from '../handlers/http/add-product/add-product'
 import { DocumentClient, awsSdkPromiseResponse } from '../../__mocks__/aws-sdk/clients/dynamodb'
 
 describe('DATA ACCESS', () => {

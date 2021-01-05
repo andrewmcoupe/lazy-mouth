@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from 'uuid'
 import { handler } from './get-product'
-import { stub } from '../../testing/test-helpers'
+import { stub } from '../../../testing/test-helpers'
 import { APIGatewayProxyEvent, Context } from 'aws-lambda'
-import { getProduct } from '../../services/product-service'
+import { getProduct } from '../../../services/product-service'
 import { Product } from '../add-product/add-product'
 
-jest.mock('../../services/product-service')
+jest.mock('../../../services/product-service')
 
 describe('GET PRODUCT', () => {
   it('should return a 400 if ID path parameter is not provided in request URL', async () => {

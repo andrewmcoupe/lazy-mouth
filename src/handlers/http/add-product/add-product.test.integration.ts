@@ -1,6 +1,6 @@
 import { readFileSync, unlinkSync } from 'fs'
 import fetch from 'node-fetch'
-import { handleStack } from '../../testing/test-helpers'
+import { handleStack } from '../../../testing/test-helpers'
 import { Product } from './add-product'
 
 const stackOutputFilename = 'stack-output.json'
