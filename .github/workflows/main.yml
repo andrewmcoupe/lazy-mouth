@@ -93,8 +93,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_SECRET }}
           aws-region: eu-west-1
 
+      - name: Confirm integration stack is deployed
+        id: deploy-integration
+        continue-on-error: true
+        run: npx serverless info --stage integ
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_SECRET }}
+
+      - name: Deploy integration stack
+        if: steps.deploy-integration.outcome != 'success'
+        run: npx serverless deploy --stage integ
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_SECRET }}
+
       - name: Run integration tests
-        run: npm run test:int
+        run: npm run test:integ
 
 
   deploy-to-dev:

@@ -1,23 +1,23 @@
 import { readFileSync, unlinkSync } from 'fs'
 import fetch from 'node-fetch'
-import { handleStack } from '../../../testing/test-helpers'
+// import { handleStack } from '../../../testing/test-helpers'
 import { Product } from './add-product'
 
 const stackOutputFilename = 'stack-output.json'
-const stage = 'integration'
+// const stage = 'integration'
 
 describe('ADD PRODUCT INTEGRATION', () => {
   let serviceEndpoint: string
 
   beforeAll(() => {
     // deploy integration stack
-    handleStack('deploy', stage)
+    // handleStack('deploy', stage)
     serviceEndpoint = JSON.parse(readFileSync(stackOutputFilename, 'utf8'))['ServiceEndpoint']
   })
 
   afterAll(() => {
     // remove integration stack
-    handleStack('remove', stage)
+    // handleStack('remove', stage)
     // remove stack output file
     unlinkSync(stackOutputFilename)
   })
