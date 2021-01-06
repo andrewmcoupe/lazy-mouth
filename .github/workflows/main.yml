@@ -109,7 +109,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_SECRET }}
 
       - name: Run integration tests
-        run: npm run test:integ
+        run: npm run test:int
 
 
   deploy-to-dev:
