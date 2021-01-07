@@ -5,12 +5,12 @@
   "version": "1.0.0",
   "description": "An app for a lazy mouth",
   "scripts": {
-    "test:unit": "export ANDY=andy jest --testMatch '**/*/*.test.ts'",
+    "test:unit": "jest --testMatch '**/*/*.test.ts'",
     "test:int": "jest --testMatch '**/*/*.test.integration.ts'",
     "lint": "eslint '*/**/*.{js,ts}' --quiet --fix",
     "prettier": "prettier \"./src/**/*.{ts,js,json}\" --check",
     "tsc": "tsc -p tsconfig.json --noEmit",
-    "deploy": "AWS_REGION=eu-west-1 TEST_STACK=false serverless deploy --stage dev"
+    "deploy": "AWS_REGION=eu-west-1 serverless deploy --stage dev"
   },
   "husky": {
     "hooks": {
