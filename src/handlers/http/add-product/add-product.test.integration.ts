@@ -1,4 +1,4 @@
-import { readFileSync, unlinkSync } from 'fs'
+import { readFileSync } from 'fs'
 import fetch from 'node-fetch'
 // import { handleStack } from '../../../testing/test-helpers'
 import { Product } from './add-product'
@@ -19,7 +19,7 @@ describe('ADD PRODUCT INTEGRATION', () => {
     // remove integration stack
     // handleStack('remove', stage)
     // remove stack output file
-    unlinkSync(stackOutputFilename)
+    // unlinkSync(stackOutputFilename)
   })
   it('should add the product to the DB', async () => {
     const stubBody: Product = {

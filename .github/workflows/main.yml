@@ -93,20 +93,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_SECRET }}
           aws-region: eu-west-1
 
-      - name: Confirm integration stack is deployed
-        id: deploy-integration
-        continue-on-error: true
-        run: npx serverless info --stage integ
+      - name: Block concurrent runs
+        uses: softprops/turnstyle@v1
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_SECRET }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Deploy integration stack
-        if: steps.deploy-integration.outcome != 'success'
-        run: npx serverless deploy --stage integ
+      - name: Deploy to internal integration test stage
+        run: SLS_DEBUG=* npx serverless deploy --stage integ
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEV_DEPLOY_ACCESS_SECRET }}
+          NODE_AUTH_TOKEN: ${{ secrets.GHP_TOKEN }}
 
       - name: Run integration tests
         run: npm run test:int
