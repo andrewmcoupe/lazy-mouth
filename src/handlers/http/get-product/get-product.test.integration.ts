@@ -26,8 +26,7 @@ describe('GET PRODUCT INTEGRATION', () => {
       method: 'post',
       body: JSON.stringify(stubBody),
     })
-    const json = await res.json()
-    insertedProduct = JSON.parse(json)
+    insertedProduct = await res.json()
   })
 
   afterAll(() => {
