@@ -1,23 +1,51 @@
+import { execSync } from 'child_process'
 import { readFileSync } from 'fs'
+import { userInfo } from 'os'
 import fetch from 'node-fetch'
-// import { handleStack } from '../../../testing/test-helpers'
 import { Product } from './add-product'
 
 const stackOutputFilename = 'stack-output.json'
-// const stage = 'integration'
+const needToRunServerlessDeploy = !process.env.INTEGRATION_TEST_DEPLOY_STAGE
+const deployStage =
+  process.env.INTEGRATION_TEST_DEPLOY_STAGE ||
+  `local-${userInfo().username.toLowerCase().replace('$', '')}`.substring(0, 16)
 
 describe('ADD PRODUCT INTEGRATION', () => {
   let serviceEndpoint: string
 
+  const deploy = () => {
+    if (needToRunServerlessDeploy) {
+      const fullServerlessDeployCommand = `npx serverless deploy --stage ${deployStage}`
+      console.log(`Running \`${fullServerlessDeployCommand}\`...`)
+      execSync(fullServerlessDeployCommand, { stdio: 'inherit' })
+    }
+
+    // Deploy stage is set in CI here (process.env.INTEGRATION_TEST_DEPLOY_STAGE)
+    const fullServerlessInfoCommand = `npx serverless info --stage ${deployStage}`
+    console.log(`Running \`${fullServerlessInfoCommand}\`...`)
+    const result = execSync(fullServerlessInfoCommand).toString()
+    console.log(result)
+
+    serviceEndpoint = JSON.parse(readFileSync(stackOutputFilename, { encoding: 'utf8' }))['ServiceEndpoint']
+  }
+
+  const removeStack = () => {
+    if (needToRunServerlessDeploy) {
+      const fullServerlessRemoveCommand = `npx serverless remove --stage ${deployStage}`
+      console.log(`Running \`${fullServerlessRemoveCommand}\`...`)
+      execSync(fullServerlessRemoveCommand, { stdio: 'inherit' })
+    }
+  }
+
   beforeAll(() => {
     // deploy integration stack
-    // handleStack('deploy', stage)
-    serviceEndpoint = JSON.parse(readFileSync(stackOutputFilename, 'utf8'))['ServiceEndpoint']
+    deploy()
   })
 
   afterAll(() => {
+    removeStack()
     // remove integration stack
-    // handleStack('remove', stage)
+    // handleStack('remove', 'local')
     // remove stack output file
     // unlinkSync(stackOutputFilename)
   })

@@ -5,6 +5,7 @@ import { APIGatewayProxyEvent, Context } from 'aws-lambda'
 import { getProduct } from '../../../services/product-service'
 import { Product } from '../add-product/add-product'
 
+console.log(process.env.ANDY)
 jest.mock('../../../services/product-service')
 
 describe('GET PRODUCT', () => {
