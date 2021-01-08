@@ -23,8 +23,8 @@ describe('GET PRODUCT INTEGRATION', () => {
   })
 
   it('should return 200 requesting a product by ID', async () => {
-    console.log(insertedProduct)
     const res = await axios(`${serviceEndpoint}/products/${insertedProduct._id}`)
+
     expect(res.status).toBe(200)
     expect(res.data).toEqual(insertedProduct)
   })
