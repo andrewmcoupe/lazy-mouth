@@ -6,10 +6,6 @@ const stackOutputFilename = 'stack-output.json'
 const serviceEndpoint: string = JSON.parse(readFileSync(stackOutputFilename, { encoding: 'utf8' }))['ServiceEndpoint']
 
 describe('ADD PRODUCT INTEGRATION', () => {
-  beforeAll(() => {
-    // clear table
-  })
-
   it('should add the product to the DB', async () => {
     const stubBody: Product = {
       title: 'Test title',
