@@ -1,54 +1,15 @@
-import { execSync } from 'child_process'
-import { readFileSync } from 'fs'
-import { userInfo } from 'os'
-import fetch from 'node-fetch'
+import axios from 'axios'
 import { Product } from './add-product'
+import { readFileSync } from 'fs'
 
 const stackOutputFilename = 'stack-output.json'
-const needToRunServerlessDeploy = !process.env.INTEGRATION_TEST_DEPLOY_STAGE
-const deployStage =
-  process.env.INTEGRATION_TEST_DEPLOY_STAGE ||
-  `local-${userInfo().username.toLowerCase().replace('$', '')}`.substring(0, 16)
+const serviceEndpoint: string = JSON.parse(readFileSync(stackOutputFilename, { encoding: 'utf8' }))['ServiceEndpoint']
 
 describe('ADD PRODUCT INTEGRATION', () => {
-  let serviceEndpoint: string
-
-  const deploy = () => {
-    if (needToRunServerlessDeploy) {
-      const fullServerlessDeployCommand = `npx serverless deploy --stage ${deployStage}`
-      console.log(`Running \`${fullServerlessDeployCommand}\`...`)
-      execSync(fullServerlessDeployCommand, { stdio: 'inherit' })
-    }
-
-    // Deploy stage is set in CI here (process.env.INTEGRATION_TEST_DEPLOY_STAGE)
-    const fullServerlessInfoCommand = `npx serverless info --stage ${deployStage}`
-    console.log(`Running \`${fullServerlessInfoCommand}\`...`)
-    const result = execSync(fullServerlessInfoCommand).toString()
-    console.log(result)
-
-    serviceEndpoint = JSON.parse(readFileSync(stackOutputFilename, { encoding: 'utf8' }))['ServiceEndpoint']
-  }
-
-  const removeStack = () => {
-    if (needToRunServerlessDeploy) {
-      const fullServerlessRemoveCommand = `npx serverless remove --stage ${deployStage}`
-      console.log(`Running \`${fullServerlessRemoveCommand}\`...`)
-      execSync(fullServerlessRemoveCommand, { stdio: 'inherit' })
-    }
-  }
-
   beforeAll(() => {
-    // deploy integration stack
-    deploy()
+    // clear table
   })
 
-  afterAll(() => {
-    removeStack()
-    // remove integration stack
-    // handleStack('remove', 'local')
-    // remove stack output file
-    // unlinkSync(stackOutputFilename)
-  })
   it('should add the product to the DB', async () => {
     const stubBody: Product = {
       title: 'Test title',
@@ -57,9 +18,9 @@ describe('ADD PRODUCT INTEGRATION', () => {
     }
 
     // call endpoint
-    const res = await fetch(`${serviceEndpoint}/products`, {
+    const res = await axios(`${serviceEndpoint}/products`, {
       method: 'post',
-      body: JSON.stringify(stubBody),
+      data: stubBody,
     })
 
     expect(res.status).toBe(201)

@@ -5,7 +5,8 @@ const dynamoDb = new DocumentClient()
 const productsTableName = process.env.PRODUCTS_TABLE_NAME as string
 
 export const insertProduct = async (product: Product) => {
-  return await dynamoDb.put({ Item: product, TableName: productsTableName, ReturnValues: 'ALL_OLD' }).promise()
+  await dynamoDb.put({ Item: product, TableName: productsTableName }).promise()
+  return product
 }
 
 export const getProductById = async (id: string) => {

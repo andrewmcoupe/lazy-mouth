@@ -1,53 +1,31 @@
-// import { readFileSync } from 'fs'
-// import fetch from 'node-fetch'
-// // import { handleStack } from '../../../testing/test-helpers'
-// import { Product } from '../add-product/add-product'
-// import { handleStack } from '../../../testing/test-helpers'
-//
-// const stackOutputFilename = 'stack-output.json'
-// // const stage = 'integration'
-//
-// describe('GET PRODUCT INTEGRATION', () => {
-//   let serviceEndpoint: string
-//   let insertedProduct: Product = {} as Product
-//
-//   beforeAll(async () => {
-//     // deploy integration stack
-//     handleStack('deploy', 'local')
-//     serviceEndpoint = JSON.parse(readFileSync(stackOutputFilename, 'utf8'))['ServiceEndpoint']
-//
-//     const stubBody: Product = {
-//       title: 'Test title',
-//       description: 'Test description',
-//       price: 5,
-//     }
-//
-//     // add a product so we can perform get request
-//     const res = await fetch(`${serviceEndpoint}/products`, {
-//       method: 'post',
-//       body: JSON.stringify(stubBody),
-//     })
-//     console.log(res)
-//
-//     insertedProduct = await res.json()
-//   })
-//
-//   afterAll(() => {
-//     // remove integration stack
-//     handleStack('remove', 'local')
-//     // remove stack output file
-//     // unlinkSync(stackOutputFilename)
-//   })
-//
-//   it('should return 200 requesting a product by ID', async () => {
-//     const res = await fetch(`${serviceEndpoint}/products/${insertedProduct._id}`)
-//     const json = await res.json()
-//
-//     expect(res.status).toBe(200)
-//     expect(json).toEqual(insertedProduct)
-//   })
-// })
+import axios from 'axios'
+import { Product } from '../add-product/add-product'
+import { readFileSync } from 'fs'
 
-it('should true', () => {
-  expect(true).toBe(true)
+const stackOutputFilename = 'stack-output.json'
+const serviceEndpoint: string = JSON.parse(readFileSync(stackOutputFilename, { encoding: 'utf8' }))['ServiceEndpoint']
+let insertedProduct: Product = {} as Product
+
+describe('GET PRODUCT INTEGRATION', () => {
+  beforeAll(async () => {
+    const stubBody: Product = {
+      title: 'Test title',
+      description: 'Test description',
+      price: 5,
+    }
+    // call endpoint
+    const res = await axios(`${serviceEndpoint}/products`, {
+      method: 'post',
+      data: stubBody,
+    })
+
+    insertedProduct = res.data
+  })
+
+  it('should return 200 requesting a product by ID', async () => {
+    console.log(insertedProduct)
+    const res = await axios(`${serviceEndpoint}/products/${insertedProduct._id}`)
+    expect(res.status).toBe(200)
+    expect(res.data).toEqual(insertedProduct)
+  })
 })

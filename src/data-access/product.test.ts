@@ -17,7 +17,6 @@ describe('DATA ACCESS', () => {
       const stubParams = {
         Item: stubProduct,
         TableName: process.env.PRODUCTS_TABLE_NAME,
-        ReturnValues: 'ALL_OLD',
       }
 
       await insertProduct(stubProduct)
@@ -25,12 +24,12 @@ describe('DATA ACCESS', () => {
       expect(client.put).toHaveBeenCalledWith(stubParams)
     })
 
-    it('should return inserted product after inserting product into DB', async () => {
-      awsSdkPromiseResponse.mockReturnValueOnce({ Attributes: stubProduct })
+    it('should return empty object after inserting product into DB', async () => {
+      awsSdkPromiseResponse.mockReturnValueOnce({})
 
       const res = await insertProduct(stubProduct)
 
-      expect(res).toEqual({ Attributes: stubProduct })
+      expect(res).toEqual(stubProduct)
     })
   })
 
