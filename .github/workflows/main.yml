@@ -98,16 +98,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-#      - name: Deploy to integration test stage
-#        run: SLS_DEBUG=* npx serverless deploy --stage integ
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.GHP_TOKEN }}
-
       - name: Run integration tests
         run: npm run test:int
-#        env:
-#          INTEGRATION_TEST_DEPLOY_STAGE: integ
-
 
   deploy-to-dev:
     name: 🛶  Deploy to dev
