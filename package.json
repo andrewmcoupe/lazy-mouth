@@ -6,8 +6,8 @@
   "description": "An app for a lazy mouth",
   "scripts": {
     "test:unit": "jest --testMatch '**/*/*.test.ts'",
-    "test:int:local": "ts-node src/testing/deploy-integ && jest --testMatch '**/*/*.test.integration.ts'",
-    "test:int": "jest --testMatch '**/*/*.test.integration.ts'",
+    "test:int": "bash integration-actions.sh -a deploy -s integ && jest --testMatch '**/*/*.test.integration.ts' && bash integration-actions.sh -a remove -s integ",
+    "test:int:local": "bash integration-actions.sh -a deploy -s local && jest --testMatch '**/*/*.test.integration.ts' && bash integration-actions.sh -a remove -s local",
     "lint": "eslint '*/**/*.{js,ts}' --quiet --fix",
     "prettier": "prettier \"./src/**/*.{ts,js,json}\" --check",
     "tsc": "tsc -p tsconfig.json --noEmit",
