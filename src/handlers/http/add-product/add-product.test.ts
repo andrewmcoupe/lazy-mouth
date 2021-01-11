@@ -4,7 +4,7 @@ import { APIGatewayProxyEvent, Context } from 'aws-lambda'
 import { addProduct } from '../../../services/product-service'
 
 jest.mock('../../../services/product-service')
-console.log(process.env)
+
 const stubBody: Product = {
   title: 'Test title',
   description: 'Test description',
