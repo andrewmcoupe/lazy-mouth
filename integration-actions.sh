@@ -1,5 +1,14 @@
 #!/bin/bash
 
+function exit_wrong_usage {
+  echo "ERROR: Wrong usage. See below for correct usage."
+  echo -n "$usage"
+  exit 1
+}
+
+
+usage="USAGE: $0 -a <action> -s <stage>"
+
 while getopts ":a:s:" opt; do
     case $opt in
         a)
@@ -9,12 +18,10 @@ while getopts ":a:s:" opt; do
           stage=$OPTARG
           ;;
         \? )
-          echo "Invalid option: $OPTARG" 1>&2
-          exit 1
+          exit_wrong_usage
           ;;
         : )
-          echo "Invalid option: $OPTARG requires an argument" 1>&2
-          exit 1
+          exit_wrong_usage
           ;;
     esac
 done
@@ -25,7 +32,7 @@ if [[ -z $stage ]]; then
     exit 1
 fi
 
-echo "Running sls $action --stage $stage..."
+echo "Running sls $action --stage $stage"
 sls "$action" --stage "$stage"
 
 
