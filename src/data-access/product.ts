@@ -15,5 +15,7 @@ export const getProductById = async (id: string) => {
 }
 
 export const getAllProducts = async () => {
-  return [] as Product[]
+  const res = await dynamoDb.scan({ TableName: productsTableName }).promise()
+
+  return res.Items as Product[]
 }

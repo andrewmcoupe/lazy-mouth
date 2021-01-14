@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { insertProduct, getProductById } from './product'
+import { insertProduct, getProductById, getAllProducts } from './product'
 import { Product } from '../handlers/http/add-product/add-product'
 import { DocumentClient, awsSdkPromiseResponse } from '../../__mocks__/aws-sdk/clients/dynamodb'
 
@@ -10,6 +10,21 @@ describe('DATA ACCESS', () => {
     title: 'Test title',
     description: 'Test description',
   }
+
+  const stubProducts: Product[] = [
+    {
+      _id: uuidv4(),
+      price: 5,
+      title: 'Test title1',
+      description: 'Test description1',
+    },
+    {
+      _id: uuidv4(),
+      price: 15,
+      title: 'Test title2',
+      description: 'Test description2',
+    },
+  ]
 
   describe('insertProduct()', () => {
     it('should call put() with the correct arguments', async () => {
@@ -52,6 +67,27 @@ describe('DATA ACCESS', () => {
       const res = await getProductById(stubProduct._id!)
 
       expect(res).toEqual(stubProduct)
+    })
+  })
+
+  describe('getAllProducts()', () => {
+    it('should call scan() with correct arguments', async () => {
+      const client = new DocumentClient()
+      const stubParams = {
+        TableName: process.env.PRODUCTS_TABLE_NAME,
+      }
+
+      await getAllProducts()
+
+      expect(client.scan).toHaveBeenCalledWith(stubParams)
+    })
+
+    it('should return the retrieved products from the DB', async () => {
+      awsSdkPromiseResponse.mockReturnValueOnce({ Items: stubProducts })
+
+      const res = await getAllProducts()
+
+      expect(res).toEqual(stubProducts)
     })
   })
 })
