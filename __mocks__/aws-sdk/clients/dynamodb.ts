@@ -2,8 +2,10 @@ export const awsSdkPromiseResponse = jest.fn().mockReturnValue(Promise.resolve(t
 
 const put = jest.fn().mockImplementation(() => ({ promise: awsSdkPromiseResponse }))
 const get = jest.fn().mockImplementation(() => ({ promise: awsSdkPromiseResponse }))
+const scan = jest.fn().mockImplementation(() => ({ promise: awsSdkPromiseResponse }))
 
 export class DocumentClient {
   put = put
   get = get
+  scan = scan
 }

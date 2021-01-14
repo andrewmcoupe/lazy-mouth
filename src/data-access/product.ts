@@ -13,3 +13,7 @@ export const getProductById = async (id: string) => {
   const res = await dynamoDb.get({ Key: { _id: id }, TableName: productsTableName }).promise()
   return res.Item as Product
 }
+
+export const getAllProducts = async () => {
+  return [] as Product[]
+}
